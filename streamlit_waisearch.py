@@ -2,6 +2,13 @@ import streamlit as st
 import webbrowser
 import urllib.parse
 
+def on_input():
+    query = st.session_state["input"]
+    encoded_query = urllib.parse.quote_plus(query)
+    url = f"https://www.google.com/search?q={encoded_query}&udm=14"
+
+    webbrowser.open(url, new=2)
+
 st.set_page_config(
     page_title="waiSearch",
     page_icon="🔎",
@@ -15,19 +22,12 @@ with st.container(horizontal_alignment="center"):
     query = st.text_input(
         "Search",
         placeholder="Search...",
-        label_visibility="collapsed"
+        label_visibility="collapsed",
+        key="input",
+        on_change=on_input,
     )
 
-    st.badge("Google Search, the way it should be - without AI summarization.")
-
-if query:
-    try:        
-        encoded_query = urllib.parse.quote_plus(query)
-        url = f"https://www.google.com/search?q={encoded_query}&udm=14"
-
-        webbrowser.open(url, new=2)
-    except Exception as e:
-        raise e
+    st.badge("Google Search, the way it should be - without AI summarization.", )
 
 with st.bottom:
     st.caption("Inspired by [udm14.com](https://udm14.com)", text_alignment="center")
