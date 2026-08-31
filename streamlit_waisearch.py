@@ -7,7 +7,7 @@ def on_input():
     encoded_query = urllib.parse.quote_plus(query)
     url = f"https://www.google.com/search?q={encoded_query}&udm=14"
 
-    webbrowser.open(url, new=2)
+    webbrowser.open_new_tab(url)
 
 st.set_page_config(
     page_title="waiSearch",
