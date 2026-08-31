@@ -25,7 +25,7 @@ if query:
         encoded_query = urllib.parse.quote_plus(query)
         url = f"https://www.google.com/search?q={encoded_query}&udm=14"
 
-        webbrowser.open(url)
+        webbrowser.open(url, new=2)
     except Exception as e:
         raise e
 
