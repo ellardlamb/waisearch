@@ -1,6 +1,7 @@
 # streamlit run <app_name>.py
 import streamlit as st
 import urllib.parse
+import webbrowser
 from random import randrange
 
 rotating_greeting = ["What's on your mind?", "I'm feeling lucky!", "Let's do this!"]
@@ -10,8 +11,10 @@ def on_input():
     encoded_query = urllib.parse.quote_plus(query)
     url = f"https://www.google.com/search?q={encoded_query}&udm=14"
 
-    # webbrowser.open_new_tab(url) # Only works when running locally, not in Streamlit Cloud
-    open_page(url)
+    if on_mobile:
+        webbrowser.open_new_tab(url)
+    else:
+        open_page(url)
 
 def open_page(url):
     open_script = f"""
@@ -36,14 +39,16 @@ with st.container(horizontal_alignment="center", vertical_alignment="distribute"
 
     query = st.text_input(
         "Search",
-        # placeholder="Google Search, without AI summarization...",
         placeholder=rotating_greeting[randrange(len(rotating_greeting))],
         label_visibility="collapsed",
         key="input",
         on_change=on_input,
     )
 
-    st.button("Search 🔎", on_click=on_input)
+    on_mobile = st.toggle("On Mobile?", value=False)
+
+    if on_mobile:
+        st.button("Search 🔎", on_click=on_input)
 
     st.badge("Google Search, without AI summarization.")
 
