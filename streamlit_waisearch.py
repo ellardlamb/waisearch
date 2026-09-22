@@ -1,7 +1,9 @@
+# streamlit run <app_name>.py
 import streamlit as st
 import urllib.parse
-from streamlit.components.v1 import html
 # import webbrowser
+
+temp_container = st.empty()
 
 def on_input():
     query = st.session_state["input"]
@@ -12,10 +14,16 @@ def on_input():
     open_page(url)
 
 def open_page(url):
-    open_script= f"""<script type="text/javascript">window.open('{url}', '_blank').focus();</script>"""
+    open_script = f"""
+        <script style="width: 0; height: 0; display: block;" type="text/javascript">
+            window.open('{url}', '_blank').focus();
+        </script>
+    """
 
-    # We specify height and width to override defaults, and reduce shifting of Streamlit elements
-    html(open_script, height=0, width=0)
+    with st.empty().container():
+        # Height cannot be zero; limitation with CSS iframe attr
+        # Causes slight visual blip when processing first request, but not subsequent requests
+        st.iframe(open_script, height=1)
 
 st.set_page_config(
     page_title="waiSearch",
@@ -23,17 +31,23 @@ st.set_page_config(
     layout="centered",
 )
 
-with st.container(horizontal_alignment="center"):
-    st.space(size="large")
+with st.container(horizontal_alignment="center", vertical_alignment="distribute"):
     st.title("waiSearch", text_alignment="center")
 
-    query = st.text_input(
-        "Search",
-        placeholder="Search...",
-        label_visibility="collapsed",
-        key="input",
-        on_change=on_input,
-    )
+    # Align search and bar and button for mobile support
+    col1, col2 = st.columns([10,1])
+
+    with col1:
+        query = st.text_input(
+            "Search",
+            placeholder="Search...",
+            label_visibility="collapsed",
+            key="input",
+            on_change=on_input,
+        )
+
+    with col2:
+        st.button("🔎", on_click=on_input)
 
     st.badge("Google Search, the way it should be - without AI summarization.", )
 
