@@ -1,9 +1,9 @@
 # streamlit run <app_name>.py
 import streamlit as st
 import urllib.parse
-# import webbrowser
+from random import randrange
 
-temp_container = st.empty()
+rotating_greeting = ["What's on your mind?", "I'm feeling lucky!", "Let's do this!"]
 
 def on_input():
     query = st.session_state["input"]
@@ -34,22 +34,18 @@ st.set_page_config(
 with st.container(horizontal_alignment="center", vertical_alignment="distribute"):
     st.title("waiSearch", text_alignment="center")
 
-    # Align search and bar and button for mobile support
-    col1, col2 = st.columns([10,1])
+    query = st.text_input(
+        "Search",
+        # placeholder="Google Search, without AI summarization...",
+        placeholder=rotating_greeting[randrange(len(rotating_greeting))],
+        label_visibility="collapsed",
+        key="input",
+        on_change=on_input,
+    )
 
-    with col1:
-        query = st.text_input(
-            "Search",
-            placeholder="Search...",
-            label_visibility="collapsed",
-            key="input",
-            on_change=on_input,
-        )
+    st.button("Search 🔎", on_click=on_input)
 
-    with col2:
-        st.button("🔎", on_click=on_input)
-
-    st.badge("Google Search, the way it should be - without AI summarization.", )
+    st.badge("Google Search, without AI summarization.")
 
 with st.bottom:
     st.caption("Inspired by [udm14.com](https://udm14.com)", text_alignment="center")
