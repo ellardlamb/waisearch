@@ -1,7 +1,7 @@
 import streamlit as st
-import webbrowser
 import urllib.parse
 from streamlit.components.v1 import html
+# import webbrowser
 
 def on_input():
     query = st.session_state["input"]
@@ -12,12 +12,10 @@ def on_input():
     open_page(url)
 
 def open_page(url):
-    open_script= """
-        <script type="text/javascript">
-            window.open('%s', '_blank').focus();
-        </script>
-    """ % (url)
-    html(open_script)
+    open_script= f"""<script type="text/javascript">window.open('{url}', '_blank').focus();</script>"""
+
+    # We specify height and width to override defaults, and reduce shifting of Streamlit elements
+    html(open_script, height=0, width=0)
 
 st.set_page_config(
     page_title="waiSearch",
