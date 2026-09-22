@@ -71,7 +71,6 @@ with st.container(horizontal_alignment="center", vertical_alignment="distribute"
             label_visibility="collapsed",
             key="input",
             on_change=on_input,
-            args=[on_mobile]
         )
         st.badge("Google Search, without AI summarization.")
 
